@@ -1,15 +1,19 @@
 {
   "name": "demo-for-boxil-app",
   "version": "1.0.0",
-  "description": "This App is Demo for BOXIL App",
+  "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "npm run build && npm run serve",
+    "build": "npx tsc",
+    "serve": "node --require dotenv/config dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/maaaaakoto35/slack-app-demo.git"
   },
+  "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
@@ -17,6 +21,17 @@
   },
   "homepage": "https://github.com/maaaaakoto35/slack-app-demo#readme",
   "dependencies": {
-    "@slack/bolt": "^3.7.0"
+    "@slack/bolt": "^3.7.0",
+    "dotenv": "^10.0.0",
+    "keyv": "^4.0.4"
+  },
+  "devDependencies": {
+    "@types/eslint": "^7.28.2",
+    "@types/keyv": "^3.1.3",
+    "@types/node": "^16.11.6",
+    "eslint": "^8.1.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.4.1"
   }
 }
