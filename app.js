@@ -3,7 +3,6 @@ dotenv.config();
 
 const { App } = require('@slack/bolt');
 const Keyv = require('keyv');
-
 /**
  * DB SETUP
  */
@@ -13,6 +12,13 @@ const keyv = new Keyv();
 // keyv.on('error', err => console.log('Connection Error', err));
 
 /**
+ * CREATE CUSTOM RECEIVER
+ */
+// const receiver = new ExpressReceiver({
+//   signingSecret: process.env.SLACK_SIGNING_SECRET
+// });
+
+/**
  * CREATE BOLT APP
  */
 const app = new App({
@@ -20,9 +26,25 @@ const app = new App({
   clientId: process.env.SLACK_CLIENT_ID,
   clientSecret: process.env.SLACK_CLIENT_SECRET,
   stateSecret: 'boxil-slack-app',
-  scopes: ['chat:write', 'channels:history', 'groups:history', 'im:history', 'mpim:history'],
+  scopes: [
+    'channels:history',
+    'channels:read',
+    'chat:write',
+    'groups:history',
+    'groups:read',
+    'im:history',
+    'im:read',
+    'mpim:history',
+    'mpim:read'
+  ],
   installationStore: {
     storeInstallation: async (installation) => {
+      // Debug FIX ME
+      console.info(`[info] team_id: ${installation.team.id}`);
+      console.info(`[info] token_type: ${installation.tokenType}`);
+      console.info(`[info] bot token: ${installation.bot.token}`);
+      console.info(`[info] user token: ${installation.user.token}`);
+
       // 実際のデータベースに保存するために、ここのコードを変更
       if (installation.isEnterpriseInstall && installation.enterprise !== undefined) {
         // OrG 全体へのインストールに対応する場合
@@ -62,7 +84,7 @@ const app = new App({
 });
 
 // Listens to incoming messages that contain "hello"
-app.message("hello", async ({ message, say }) => {
+app.message("hello", async ({ message, say, body }) => {
   // say() sends a message to the channel where the event was triggered
   say(`Hey there <@${message.user}>!`);
 });
